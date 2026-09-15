@@ -5,10 +5,13 @@ import IntroductionPage from './components/IntroductionPage.jsx';
 import SingleQubitFidelityPage from './components/SingleQubitFidelityPage.jsx';
 import TwoQubitFidelityPage from './components/TwoQubitFidelityPage.jsx';
 
+import TransmonPage from './components/TransmonPage.jsx';
+
 const pages = [
   { id: 'introduction', title: 'Introduction to quantum effects', icon: '01', component: IntroductionPage },
   { id: 'single-qubit-fidelity', title: 'Single-qubit fidelity', icon: '02', component: SingleQubitFidelityPage },
   { id: 'two-qubit-fidelity', title: 'Two-qubit fidelity', icon: '03', component: TwoQubitFidelityPage },
+  { id: 'transmon', title: 'Transmon frequency & anharmonicity', icon: '04', component: TransmonPage },
 ];
 
 export default function App() {

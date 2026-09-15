@@ -100,3 +100,30 @@ a { color: #cbb6f2; }
   .input-grid { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) { .layout { transition: none; } }
+
+.calculation-mode { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 28px; padding: 16px; border: 1px solid #48405c; border-radius: 10px; }
+.calculation-mode legend { color: #c5ccda; padding: 0 6px; }
+.calculation-mode label { display: flex; gap: 8px; align-items: center; font-size: 14px; cursor: pointer; }
+.calculation-mode input, .plot-inspector input { accent-color: #c4aff0; }
+.plot-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+.plot-heading h3 { margin: 0; }
+.plot-heading label { font-size: 13px; }
+.plot-heading select { margin-left: 8px; padding: 8px; border: 1px solid #787087; border-radius: 6px; color: #edf0f7; background: #191e2c; }
+.infidelity-plot > p { font-size: 13px; color: #b1bacd; }
+.infidelity-plot svg { display: block; width: 100%; height: auto; margin: 20px 0; }
+.infidelity-plot svg text { fill: #c5ccda; font-size: 12px; }
+.plot-inspector { display: grid; gap: 10px; font-size: 14px; }
+.plot-inspector input { width: 100%; }
+.infidelity-plot output { display: block; margin-top: 12px; font-size: 14px; }
+
+.plot-legend { display: flex; flex-wrap: wrap; gap: 12px 20px; border: 1px solid #655875; border-radius: 8px; padding: 10px 14px; font-size: 13px; background: #191e2c; }
+.plot-legend > span { display: inline-flex; align-items: center; gap: 8px; }
+.legend-line { display: inline-block; width: 22px; height: 3px; background: #c4aff0; }
+.legend-star { color: #ff4d5e; font-size: 22px; line-height: 1; }
+.measured-data { margin-top: 24px; padding-top: 20px; border-top: 1px solid #655875; font-size: 14px; }
+.measured-data input[type='checkbox'] { accent-color: #c4aff0; }
+.measurement-feedback { overflow-wrap: anywhere; }
+
+.transmon-results { margin: 0; display: grid; gap: 16px; }
+.transmon-results dt { color: #b1bacd; font-size: 13px; }
+.transmon-results dd { margin: 4px 0 0; font-size: 18px; overflow-wrap: anywhere; }

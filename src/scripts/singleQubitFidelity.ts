@@ -11,3 +11,15 @@ export function single_qubit_F(tg: number, T1: number, T2: number): number {
   if (!Number.isFinite(F)) throw new Error('These times exceed the numerical range. Please use less extreme values.');
   return F;
 }
+
+/** Sweep 10–100 ns inclusive at 1 ns intervals. Infidelity is 1 − F. */
+export function singleQubitInfidelityRange(T1: number, T2: number): { gateTime: number; infidelity: number }[] {
+  return Array.from({ length: 91 }, (_, index) => {
+    const gateTime = 10 + index;
+    const infidelity = 1 - single_qubit_F(gateTime, T1, T2);
+    if (!Number.isFinite(infidelity) || infidelity <= 0) {
+      throw new Error('These coherence times produce infidelity outside the positive numerical range needed for the log plot. Please use less extreme values.');
+    }
+    return { gateTime, infidelity };
+  });
+}

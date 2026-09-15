@@ -47,3 +47,11 @@ npm run build
 ```
 
 The fidelity scripts are TypeScript translations of the supplied Python formulas. Gate time `tg` is supplied in nanoseconds; all T1 and T2 inputs remain in microseconds. Both scripts convert `tg / 1000` before evaluating the formulas. Outputs show decoherence-limited fidelity F as both a number and a percentage, without clamping. Node.js 24 runs the TypeScript scripts in tests using built-in type stripping; Vite transpiles them for the browser.
+
+Both fidelity pages offer single gate time and 10–100 ns range modes (1 ns steps). Range mode uses the shared `InfidelityPlot` component with logarithmic Y-axis by default, a linear-axis option, and a slider to inspect calculated points. Optional measured fidelity is entered as 0–100% with a measured gate time in ns. Its infidelity (`1 - percentage / 100`) appears as a red star labeled “Measured data” in the legend. A 100% measurement switches to linear scale because its infidelity is zero.
+
+## Transmon calculator
+
+`src/components/TransmonPage.jsx` imports `src/scripts/transmon.ts`. Enter EJ/h in GHz and EC/h in MHz. The script uses Eq. (6) and every bracket term through ξ²⁴ in Eqs. (B1) and (B2) of [Didier et al., arXiv:1706.06566v2](https://arxiv.org/pdf/1706.06566v2). It returns frequency in GHz, positive paper-convention anharmonicity in MHz, signed anharmonicity in MHz, ξ, and EJ/EC. A model-validity note appears for EJ/EC < 50. These are perturbative estimates; the displayed precision is not an accuracy guarantee.
+
+Tests include an independent 30-state oscillator diagonalization reference at EJ/h = 10 GHz and EC/h = 200 MHz, unit scaling, sign conventions, and invalid inputs.

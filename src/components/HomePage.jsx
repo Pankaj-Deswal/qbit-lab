@@ -15,6 +15,7 @@ export default function HomePage({ onNavigate }) {
         ['01', 'introduction', 'Build your foundation', 'Discover qubits and the size of their state space.'],
         ['02', 'single-qubit-fidelity', 'Single-qubit fidelity', 'Calculate fidelity from gate, relaxation, and Ramsey decay times.'],
         ['03', 'two-qubit-fidelity', 'Two-qubit fidelity', 'Calculate fidelity using the coherence times of both qubits.'],
+        ['04', 'transmon', 'Transmon parameters', 'Calculate frequency and anharmonicity from EJ and EC.'],
       ].map(([number, id, title, description]) => <button className="home-card" key={id} onClick={() => onNavigate(id)}><span className="eyebrow">{number} / Explore</span><h3>{title}</h3><p>{description}</p><span aria-hidden="true">↗</span></button>)}
     </div>
   </div>;

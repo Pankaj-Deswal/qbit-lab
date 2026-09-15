@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { basisStates } from './introduction.js';
-import { single_qubit_F } from './singleQubitFidelity.ts';
-import { two_qubit_F } from './twoQubitFidelity.ts';
+import { single_qubit_F, singleQubitInfidelityRange } from './singleQubitFidelity.ts';
+import { two_qubit_F, twoQubitInfidelityRange } from './twoQubitFidelity.ts';
 
 test('basis state counts preserve large integer precision and reject invalid counts', () => {
   assert.equal(basisStates({ qubits: 3 }), '8');
@@ -34,4 +34,33 @@ test('fidelity scripts reject invalid times in every parameter', () => {
 test('nanosecond gate times convert to microseconds for both fidelity scripts', () => {
   assert.ok(Math.abs(single_qubit_F(50, 100, 80) - 0.9997083333333333) < 1e-14);
   assert.ok(Math.abs(two_qubit_F(200, 100, 120, 80, 90) - 0.9973777777777778) < 1e-14);
+});
+
+test('gate-time sweep covers 10–100 ns and uses one minus fidelity', () => {
+  const points = singleQubitInfidelityRange(100, 80);
+  assert.equal(points.length, 91);
+  assert.equal(points[0].gateTime, 10);
+  assert.equal(points.at(-1).gateTime, 100);
+  points.forEach((point, index) => {
+    assert.equal(point.gateTime, 10 + index);
+    assert.equal(point.infidelity, 1 - single_qubit_F(point.gateTime, 100, 80));
+    if (index) assert.ok(point.infidelity > points[index - 1].infidelity);
+  });
+  assert.throws(() => singleQubitInfidelityRange(0, 80));
+  assert.throws(() => singleQubitInfidelityRange(Number.MAX_VALUE, Number.MAX_VALUE));
+});
+
+test('two-qubit sweep covers 10–100 ns and uses both qubits in the supplied formula', () => {
+  const points = twoQubitInfidelityRange(100, 120, 80, 90);
+  assert.equal(points.length, 91);
+  assert.equal(points[0].gateTime, 10);
+  assert.equal(points.at(-1).gateTime, 100);
+  points.forEach((point, index) => {
+    assert.equal(point.gateTime, 10 + index);
+    assert.equal(point.infidelity, 1 - two_qubit_F(point.gateTime, 100, 120, 80, 90));
+    if (index) assert.ok(point.infidelity > points[index - 1].infidelity);
+  });
+  assert.notEqual(points[0].infidelity, twoQubitInfidelityRange(100, 240, 80, 180)[0].infidelity);
+  assert.throws(() => twoQubitInfidelityRange(100, 0, 80, 90));
+  assert.throws(() => twoQubitInfidelityRange(...Array(4).fill(Number.MAX_VALUE)));
 });
