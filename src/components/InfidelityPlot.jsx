@@ -48,14 +48,14 @@ export default function InfidelityPlot({ points }) {
       {measuredPoint && <span><span className="legend-star" aria-hidden="true">★</span> Measured data</span>}
     </div>
     <svg viewBox="0 0 650 365" role="img" aria-label={`Gate time versus infidelity, ${scale === 'log' ? 'logarithmic' : 'linear'} Y-axis. Infidelity rises from ${min.toExponential(3)} at 10 ns to ${max.toExponential(3)} at 100 ns.`}>
-      {ticks.map((value, index) => <g key={index}><line x1={left} x2={left + width} y1={y(value)} y2={y(value)} stroke="#41485d"/><text x={left - 10} y={y(value) + 4} textAnchor="end">{value.toExponential(1)}</text></g>)}
-      {[10, 25, 40, 55, 70, 85, 100].map(value => <g key={value}><line x1={x(value)} x2={x(value)} y1={top + height} y2={top + height + 5} stroke="#a8b0c3"/><text x={x(value)} y={top + height + 23} textAnchor="middle">{value}</text></g>)}
-      <path d={`M${left} ${top}V${top + height}H${left + width}`} fill="none" stroke="#a8b0c3"/>
-      <polyline points={points.map(point => `${x(point.gateTime)},${y(point.infidelity)}`).join(' ')} fill="none" stroke="#c4aff0" strokeWidth="3"/>
-      <circle cx={x(selected.gateTime)} cy={y(selected.infidelity)} r="5" fill="#fff" stroke="#c4aff0" strokeWidth="2"/>
+      {ticks.map((value, index) => <g key={index}><line x1={left} x2={left + width} y1={y(value)} y2={y(value)} stroke="var(--border)"/><text x={left - 10} y={y(value) + 4} textAnchor="end">{value.toExponential(1)}</text></g>)}
+      {[10, 25, 40, 55, 70, 85, 100].map(value => <g key={value}><line x1={x(value)} x2={x(value)} y1={top + height} y2={top + height + 5} stroke="var(--muted)"/><text x={x(value)} y={top + height + 23} textAnchor="middle">{value}</text></g>)}
+      <path d={`M${left} ${top}V${top + height}H${left + width}`} fill="none" stroke="var(--muted)"/>
+      <polyline points={points.map(point => `${x(point.gateTime)},${y(point.infidelity)}`).join(' ')} fill="none" stroke="var(--blue)" strokeWidth="3"/>
+      <circle cx={x(selected.gateTime)} cy={y(selected.infidelity)} r="5" fill="var(--surface)" stroke="var(--blue)" strokeWidth="2"/>
       {measuredPoint && <g transform={`translate(${x(measuredPoint.gateTime)} ${y(measuredPoint.infidelity)})`}>
         <title>{`Measured data: ${measuredPoint.gateTime} ns, fidelity ${measuredPoint.fidelity * 100}%, infidelity ${measuredPoint.infidelity.toExponential(6)}`}</title>
-        <polygon points="0,-10 2.94,-4.05 9.51,-3.09 4.76,1.55 5.88,8.09 0,5 -5.88,8.09 -4.76,1.55 -9.51,-3.09 -2.94,-4.05" fill="#ff4d5e" stroke="#ffd2d7" strokeWidth="1" />
+        <polygon points="0,-10 2.94,-4.05 9.51,-3.09 4.76,1.55 5.88,8.09 0,5 -5.88,8.09 -4.76,1.55 -9.51,-3.09 -2.94,-4.05" fill="var(--measured)" stroke="var(--white)" strokeWidth="1" />
       </g>}
       <text x={left + width / 2} y="354" textAnchor="middle">Gate time (ns)</text>
       <text transform="translate(16 164) rotate(-90)" textAnchor="middle">Infidelity (1 − F)</text>

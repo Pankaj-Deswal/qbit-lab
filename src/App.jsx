@@ -15,8 +15,12 @@ const pages = [
 ];
 
 export default function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedId, setSelectedId] = useState('home');
+  function goHome() {
+    setSelectedId('home');
+    setSidebarOpen(false);
+  }
   const isHome = selectedId === 'home';
   const ActivePage = isHome ? HomePage : pages.find((page) => page.id === selectedId).component;
 
@@ -32,11 +36,11 @@ export default function App() {
         >
           <span aria-hidden="true">☰</span>
         </button>
-        <button className="brand-home" onClick={() => setSelectedId('home')} aria-label="Quantum Effects home">
+        <button className="brand-home" onClick={goHome} aria-label="Quantum Effects home">
           <span className="brand-mark" aria-hidden="true">Q</span>
           <h1>Quantum Effects</h1>
         </button>
-        <button className="home-link" aria-current={isHome ? 'page' : undefined} onClick={() => setSelectedId('home')}>Home</button>
+        <button className="home-link" aria-current={isHome ? 'page' : undefined} onClick={goHome}>Home</button>
       </header>
 
       <div className={`layout ${sidebarOpen ? '' : 'sidebar-collapsed'}`}>
