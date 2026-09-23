@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-export default defineConfig({ 
-    plugins: [react()],
-    base: '/quantum-effects/',
- });
+export default defineConfig({
+  plugins: [react()],
+  base: '/quantum-effects/',
+  preview: { port: 4173, open: '/quantum-effects/' },
+});

@@ -55,3 +55,13 @@ Both fidelity pages offer single gate time and 10–100 ns range modes (1 ns ste
 `src/components/TransmonPage.jsx` imports `src/scripts/transmon.ts`. Enter EJ/h in GHz and EC/h in MHz. The script uses Eq. (6) and every bracket term through ξ²⁴ in Eqs. (B1) and (B2) of [Didier et al., arXiv:1706.06566v2](https://arxiv.org/pdf/1706.06566v2). It returns frequency in GHz, positive paper-convention anharmonicity in MHz, signed anharmonicity in MHz, ξ, and EJ/EC. A model-validity note appears for EJ/EC < 50. These are perturbative estimates; the displayed precision is not an accuracy guarantee.
 
 Tests include an independent 30-state oscillator diagonalization reference at EJ/h = 10 GHz and EC/h = 200 MHz, unit scaling, sign conventions, and invalid inputs.
+
+## Page URLs and navigation
+
+Home is `/quantum-effects/`. Articles use `/quantum-effects/articles/introduction`, `/quantum-effects/articles/single-qubit-fidelity`, `/quantum-effects/articles/two-qubit-fidelity`, and `/quantum-effects/articles/transmon`. The header Articles dropdown replaces the sidebar. Navigation updates browser history, so Back/Forward restores the previous page. Direct article links and reloads work with Vite.
+
+For production hosting, configure an SPA fallback: serve `index.html` for unknown paths so direct article URLs work. The app displays a page-not-found view for unrecognized routes.
+
+The home page includes Anuj Aggarwal and Pankaj Kumar Deswal with their provided LinkedIn profile links.
+
+Run `npm run build` followed by `npm run preview` to open http://localhost:4173/quantum-effects/. All navigation and asset URLs use the configured Vite base path.

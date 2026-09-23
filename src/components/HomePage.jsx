@@ -18,5 +18,13 @@ export default function HomePage({ onNavigate }) {
         ['04', 'transmon', 'Transmon parameters', 'Calculate frequency and anharmonicity from EJ and EC.'],
       ].map(([number, id, title, description]) => <button className="home-card" key={id} onClick={() => onNavigate(id)}><span className="eyebrow">{number} / Explore</span><h3>{title}</h3><p>{description}</p><span aria-hidden="true">↗</span></button>)}
     </div>
+    <section className="creators" aria-labelledby="creators-title">
+      <p className="eyebrow">The people behind Quantum Effects</p>
+      <h2 id="creators-title">Meet the creators</h2>
+      <div className="creator-grid">
+        <article className="creator-card"><h3>Anuj Aggarwal</h3><p>Co-creator</p><a href="https://www.linkedin.com/in/anuj-aggarwal-365b6886/" target="_blank" rel="noopener noreferrer">Anuj on LinkedIn <span aria-hidden="true">↗</span></a></article>
+        <article className="creator-card"><h3>Pankaj Kumar Deswal</h3><p>Co-creator</p><a href="https://www.linkedin.com/in/pankaj-kumar-deswal/" target="_blank" rel="noopener noreferrer">Pankaj on LinkedIn <span aria-hidden="true">↗</span></a></article>
+      </div>
+    </section>
   </div>;
 }
