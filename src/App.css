@@ -142,3 +142,10 @@ a { color: var(--blue); }
   .articles-toggle { padding: 8px 10px; }
   .creator-grid { grid-template-columns: 1fr; }
 }
+
+.quantum-cat { margin: 0; }
+.quantum-cat img { display: block; width: 100%; height: auto; border-radius: 14px; }
+.quantum-cat figcaption { color: var(--muted); font-size: 13px; line-height: 1.7; padding: 14px 8px 0; }
+.plot-interaction { cursor: crosshair; touch-action: none; }
+.plot-interaction:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.infidelity-plot .plot-help { font-size: 12px; }

@@ -1,4 +1,4 @@
-import QuantumComputerGraphic from './QuantumComputerGraphic.jsx';
+import catImage from '../assets/schrodinger-cat.png';
 
 export default function HomePage({ onNavigate }) {
   return <div className="home-page">
@@ -8,7 +8,10 @@ export default function HomePage({ onNavigate }) {
         <p>Explore the ideas behind quantum computing. Read an article, change the inputs, and see the mathematics come to life.</p>
         <button className="primary-button" onClick={() => onNavigate('introduction')}>Start exploring <span aria-hidden="true">→</span></button>
       </div>
-      <QuantumComputerGraphic />
+      <figure className="quantum-cat">
+        <img src={catImage} width="1536" height="1024" alt="Schrödinger’s cat: overlapping alive and dead states in a box illustrate a superposition of possible outcomes." />
+        <figcaption>In Schrödinger’s thought experiment, a cat’s fate is linked to a quantum event. The idealized state combines alive and dead alternatives; a measurement gives one outcome.</figcaption>
+      </figure>
     </div>
     <div className="home-cards">
       {[

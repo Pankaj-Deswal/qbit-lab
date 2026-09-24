@@ -3,6 +3,7 @@ import { useState } from 'react';
 export default function InfidelityPlot({ points }) {
   const [scale, setScale] = useState('log');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [inspecting, setInspecting] = useState(false);
   const [measurementEnabled, setMeasurementEnabled] = useState(false);
   const [measuredTime, setMeasuredTime] = useState('50');
   const [measuredFidelity, setMeasuredFidelity] = useState('');
@@ -38,6 +39,24 @@ export default function InfidelityPlot({ points }) {
     return scale === 'log' ? 10 ** value : value;
   });
   const selected = points[selectedIndex];
+  const tooltipX = Math.max(left, Math.min(left + width - 200, x(selected.gateTime) + (x(selected.gateTime) > left + width / 2 ? -210 : 12)));
+  const tooltipY = Math.max(top, Math.min(top + height - 60, y(selected.infidelity) - 70));
+  function inspectPointer(event) {
+    const svg = event.currentTarget.ownerSVGElement;
+    const matrix = svg.getScreenCTM();
+    if (!matrix) return;
+    const position = new DOMPoint(event.clientX, event.clientY).matrixTransform(matrix.inverse());
+    setSelectedIndex(Math.max(0, Math.min(points.length - 1, Math.round((position.x - left) / width * (points.length - 1)))));
+    setInspecting(true);
+  }
+  function inspectKeyboard(event) {
+    const offsets = { ArrowRight: 1, ArrowUp: 1, ArrowLeft: -1, ArrowDown: -1 };
+    if (event.key in offsets || event.key === 'Home' || event.key === 'End') {
+      event.preventDefault();
+      setInspecting(true);
+      setSelectedIndex(index => event.key === 'Home' ? 0 : event.key === 'End' ? points.length - 1 : Math.max(0, Math.min(points.length - 1, index + offsets[event.key])));
+    }
+  }
   return <section className="infidelity-plot" aria-label="Gate time versus infidelity">
     <div className="plot-heading"><h3>Gate time vs infidelity</h3>
       <label>Y-axis <select value={scale} onChange={event => setScale(event.target.value)}><option value="log" disabled={zeroMeasurement}>Logarithmic</option><option value="linear">Linear</option></select></label>
@@ -47,23 +66,37 @@ export default function InfidelityPlot({ points }) {
       <span><span className="legend-line" aria-hidden="true" /> Calculated infidelity</span>
       {measuredPoint && <span><span className="legend-star" aria-hidden="true">★</span> Measured data</span>}
     </div>
-    <svg viewBox="0 0 650 365" role="img" aria-label={`Gate time versus infidelity, ${scale === 'log' ? 'logarithmic' : 'linear'} Y-axis. Infidelity rises from ${min.toExponential(3)} at 10 ns to ${max.toExponential(3)} at 100 ns.`}>
+    <p className="plot-help">Move or drag across the plot to inspect a point. Use arrow keys when the plot is focused.</p>
+    <svg viewBox="0 0 650 365" role="group" aria-label={`Gate time versus infidelity, ${scale === 'log' ? 'logarithmic' : 'linear'} Y-axis. Infidelity rises from ${min.toExponential(3)} at 10 ns to ${max.toExponential(3)} at 100 ns.`}>
       {ticks.map((value, index) => <g key={index}><line x1={left} x2={left + width} y1={y(value)} y2={y(value)} stroke="var(--border)"/><text x={left - 10} y={y(value) + 4} textAnchor="end">{value.toExponential(1)}</text></g>)}
       {[10, 25, 40, 55, 70, 85, 100].map(value => <g key={value}><line x1={x(value)} x2={x(value)} y1={top + height} y2={top + height + 5} stroke="var(--muted)"/><text x={x(value)} y={top + height + 23} textAnchor="middle">{value}</text></g>)}
       <path d={`M${left} ${top}V${top + height}H${left + width}`} fill="none" stroke="var(--muted)"/>
       <polyline points={points.map(point => `${x(point.gateTime)},${y(point.infidelity)}`).join(' ')} fill="none" stroke="var(--blue)" strokeWidth="3"/>
-      <circle cx={x(selected.gateTime)} cy={y(selected.infidelity)} r="5" fill="var(--surface)" stroke="var(--blue)" strokeWidth="2"/>
+
       {measuredPoint && <g transform={`translate(${x(measuredPoint.gateTime)} ${y(measuredPoint.infidelity)})`}>
         <title>{`Measured data: ${measuredPoint.gateTime} ns, fidelity ${measuredPoint.fidelity * 100}%, infidelity ${measuredPoint.infidelity.toExponential(6)}`}</title>
         <polygon points="0,-10 2.94,-4.05 9.51,-3.09 4.76,1.55 5.88,8.09 0,5 -5.88,8.09 -4.76,1.55 -9.51,-3.09 -2.94,-4.05" fill="var(--measured)" stroke="var(--white)" strokeWidth="1" />
       </g>}
       <text x={left + width / 2} y="354" textAnchor="middle">Gate time (ns)</text>
       <text transform="translate(16 164) rotate(-90)" textAnchor="middle">Infidelity (1 − F)</text>
+      <rect x={left} y={top} width={width} height={height} fill="transparent" className="plot-interaction"
+        role="slider" tabIndex="0" aria-label="Inspect gate time on plot" aria-valuemin={10} aria-valuemax={100}
+        aria-valuenow={selected.gateTime} aria-valuetext={`${selected.gateTime} ns, infidelity ${selected.infidelity.toExponential(6)}`}
+        onPointerMove={inspectPointer}
+        onPointerDown={event => { event.currentTarget.focus(); event.currentTarget.setPointerCapture(event.pointerId); inspectPointer(event); }}
+        onPointerUp={event => { if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId); }}
+        onPointerLeave={() => setInspecting(false)} onPointerCancel={() => setInspecting(false)}
+        onFocus={() => setInspecting(true)} onBlur={() => setInspecting(false)} onKeyDown={inspectKeyboard} />
+      {inspecting && <g pointerEvents="none" aria-hidden="true">
+        <line x1={x(selected.gateTime)} x2={x(selected.gateTime)} y1={top} y2={top + height} stroke="var(--blue-border)" strokeDasharray="4 4" />
+        <circle cx={x(selected.gateTime)} cy={y(selected.infidelity)} r="5" fill="var(--surface)" stroke="var(--blue)" strokeWidth="2" />
+        <g transform={`translate(${tooltipX} ${tooltipY})`}>
+          <rect width="200" height="60" rx="7" fill="var(--surface)" stroke="var(--blue-border)" />
+          <text x="12" y="23">Gate time: {selected.gateTime} ns</text>
+          <text x="12" y="44">Infidelity: {selected.infidelity.toExponential(6)}</text>
+        </g>
+      </g>}
     </svg>
-    <label className="plot-inspector">Inspect gate time: {selected.gateTime} ns
-      <input type="range" min="0" max={points.length - 1} step="1" value={selectedIndex} onChange={event => setSelectedIndex(Number(event.target.value))} />
-    </label>
-    <output aria-live="polite">Infidelity at {selected.gateTime} ns: {selected.infidelity.toExponential(6)}</output>
     <div className="measured-data">
       <label><input type="checkbox" checked={measurementEnabled} onChange={event => { setMeasurementEnabled(event.target.checked); setMeasurementError(''); }} /> Add measured fidelity (optional)</label>
       {measurementEnabled && <form onSubmit={addMeasurement}>

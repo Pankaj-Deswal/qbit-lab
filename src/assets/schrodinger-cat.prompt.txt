@@ -1,0 +1,6 @@
+Generated using the built-in image_gen tool.
+
+Use case: scientific-educational. Asset: polished website hero illustration explaining Schrodinger's cat thought experiment. Light grey-white background, restrained slate grey and muted blue palette, no purple or gold. Elegant editorial illustration with a translucent conceptual box containing overlapping renderings of the SAME cat: one upright and alert, one lying peacefully motionless representing dead, non-graphic. Clearly an illustrative superposition of alternatives, not two actual cats. Above exact title 'Schrödinger’s cat'. Labels 'Alive' and 'Dead' next to corresponding states. Below box exact caption 'A superposition of two possible outcomes'. Small footer 'A quantum thought experiment'. Attractive expressive cat, sophisticated soft shading and clean composition, legible typography, generous whitespace. No fridge, no gore, no decorative neon. Landscape 3:2 composition.
+
+Final edit prompt:
+Keep this illustration exactly the same except remove the small right-side text 'UNTIL MEASURED BOTH ARE REAL' entirely, leaving clean blank background there. This text is misleading. Keep the title, Alive and Dead labels, bottom caption and footer unchanged. No new text.

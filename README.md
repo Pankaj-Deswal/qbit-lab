@@ -48,7 +48,7 @@ npm run build
 
 The fidelity scripts are TypeScript translations of the supplied Python formulas. Gate time `tg` is supplied in nanoseconds; all T1 and T2 inputs remain in microseconds. Both scripts convert `tg / 1000` before evaluating the formulas. Outputs show decoherence-limited fidelity F as both a number and a percentage, without clamping. Node.js 24 runs the TypeScript scripts in tests using built-in type stripping; Vite transpiles them for the browser.
 
-Both fidelity pages offer single gate time and 10–100 ns range modes (1 ns steps). Range mode uses the shared `InfidelityPlot` component with logarithmic Y-axis by default, a linear-axis option, and a slider to inspect calculated points. Optional measured fidelity is entered as 0–100% with a measured gate time in ns. Its infidelity (`1 - percentage / 100`) appears as a red star labeled “Measured data” in the legend. A 100% measurement switches to linear scale because its infidelity is zero.
+Both fidelity pages offer single gate time and 10–100 ns range modes (1 ns steps). Range mode uses the shared `InfidelityPlot` component with logarithmic Y-axis by default, a linear-axis option, and direct mouse, touch, and keyboard inspection on the plot with values beside the selected point. Optional measured fidelity is entered as 0–100% with a measured gate time in ns. Its infidelity (`1 - percentage / 100`) appears as a red star labeled “Measured data” in the legend. A 100% measurement switches to linear scale because its infidelity is zero.
 
 ## Transmon calculator
 
@@ -65,3 +65,5 @@ For production hosting, configure an SPA fallback: serve `index.html` for unknow
 The home page includes Anuj Aggarwal and Pankaj Kumar Deswal with their provided LinkedIn profile links.
 
 Run `npm run build` followed by `npm run preview` to open http://localhost:4173/quantum-effects/. All navigation and asset URLs use the configured Vite base path.
+
+The home page uses `src/assets/schrodinger-cat.png`, generated with the built-in image generation tool. The generation and final edit prompts are saved in `src/assets/schrodinger-cat.prompt.txt`.
