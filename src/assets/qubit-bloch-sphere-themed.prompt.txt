@@ -1,0 +1,3 @@
+Mode: built-in image_gen, edit of qubit-bloch-sphere.jpeg.
+
+Edit the provided Qubit educational graphic for use on QubitLab. Preserve exactly the composition, content, text 'Qubit', pronunciation, 'Basic unit of quantum information', and the Bloch sphere including every axis arrow and label (z-hat = |0>, -z-hat = |1>, x-hat, y-hat, |psi>, theta, phi), dotted projections and equator. Change only the warm beige background to a perfectly uniform cool light grey #f6f6f7 (RGB 246,246,247), including the sphere interior. Match dark text/lines to charcoal #202328. No shadows, gradients, border, paper texture, cream tones or new text. Sharp legible rendering, same wide aspect ratio. All outer edges must be flat #f6f6f7 so it merges into the website.

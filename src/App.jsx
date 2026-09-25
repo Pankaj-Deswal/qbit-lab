@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { pagePath as routePath, resolvePage } from './routes.js';
 
 import HomePage from './components/HomePage.jsx';
 import IntroductionPage from './components/IntroductionPage.jsx';
@@ -8,7 +9,7 @@ import TwoQubitFidelityPage from './components/TwoQubitFidelityPage.jsx';
 import TransmonPage from './components/TransmonPage.jsx';
 
 const basePath = import.meta.env.BASE_URL;
-const pagePath = id => id === 'home' ? basePath : `${basePath}articles/${id}`;
+const pagePath = id => routePath(basePath, id);
 
 const pages = [
   { id: 'introduction', title: 'Introduction to quantum effects', icon: '01', component: IntroductionPage },
@@ -18,81 +19,69 @@ const pages = [
 ];
 
 export default function App() {
-  const [pathname, setPathname] = useState(window.location.pathname);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef(null);
-  const toggleRef = useRef(null);
+  const [location, setLocation] = useState(() => ({ pathname: window.location.pathname, hash: window.location.hash }));
+  const { pathname, hash } = location;
   const isHome = pathname === basePath || pathname === basePath.slice(0, -1);
-  const page = pages.find(page => pathname === pagePath(page.id) || pathname === `${pagePath(page.id)}/`);
+  const route = resolvePage(basePath, pathname);
+  const page = pages.find(page => page.id === route?.id);
   const ActivePage = isHome ? HomePage : page?.component;
 
   useEffect(() => {
-    function onPopState() { setPathname(window.location.pathname); setMenuOpen(false); }
+    function onPopState() { setLocation({ pathname: window.location.pathname, hash: window.location.hash }); }
     window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
+    window.addEventListener('hashchange', onPopState);
+    return () => { window.removeEventListener('popstate', onPopState); window.removeEventListener('hashchange', onPopState); };
   }, []);
 
   useEffect(() => {
-    document.title = `${isHome ? 'Home' : page?.title || 'Page not found'} | Quantum Effects`;
+    document.title = `${isHome ? 'Home' : page?.title || 'Page not found'} | QubitLab`;
   }, [pathname, isHome, page]);
 
+  // Run after React has mounted the destination page, including direct hash URLs.
   useEffect(() => {
-    if (!menuOpen) return;
-    function closeOutside(event) {
-      if (!menuRef.current?.contains(event.target)) setMenuOpen(false);
-    }
-    function closeEscape(event) {
-      if (event.key === 'Escape') { setMenuOpen(false); toggleRef.current?.focus(); }
-    }
-    document.addEventListener('pointerdown', closeOutside);
-    document.addEventListener('keydown', closeEscape);
-    return () => {
-      document.removeEventListener('pointerdown', closeOutside);
-      document.removeEventListener('keydown', closeEscape);
-    };
-  }, [menuOpen]);
+    if (!hash) return;
+    const frame = requestAnimationFrame(() => {
+      const target = document.getElementById(hash.slice(1));
+      target?.scrollIntoView({ block: 'start', behavior: 'instant' });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [location]);
 
-  function navigate(id) {
+  function navigate(id, section = '') {
     const nextPath = pagePath(id);
-    if (window.location.pathname !== nextPath) {
-      window.history.pushState(null, '', nextPath);
-      setPathname(nextPath);
-      window.scrollTo(0, 0);
+    const nextHash = section ? `#${section}` : '';
+    if (window.location.pathname + window.location.hash !== nextPath + nextHash) {
+      window.history.pushState(null, '', nextPath + nextHash);
     }
-    setMenuOpen(false);
+    setLocation({ pathname: nextPath, hash: nextHash });
+    if (!section) window.scrollTo(0, 0);
   }
-  function linkClick(event, id) {
+  function linkClick(event, id, section = '') {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
-    navigate(id);
+    navigate(id, section);
   }
 
   return (
     <div className="app">
+      <a className="skip-link" href="#main-content">Skip to content</a>
       <header className="header">
-        <a href={basePath} className="brand-home" onClick={event => linkClick(event, 'home')} aria-label="Quantum Effects home">
+        <a href={basePath} className="brand-home" onClick={event => linkClick(event, 'home')} aria-label="QubitLab home">
           <span className="brand-mark" aria-hidden="true">Q</span>
-          <h1>Quantum Effects</h1>
+          <h1>QubitLab</h1>
         </a>
         <nav className="header-nav" aria-label="Main navigation">
-          <a href={basePath} className="home-link" aria-current={isHome ? 'page' : undefined} onClick={event => linkClick(event, 'home')}>Home</a>
-          <div className="articles-dropdown" ref={menuRef} onBlur={event => {
-            if (!event.currentTarget.contains(event.relatedTarget)) setMenuOpen(false);
-          }}>
-            <button className="articles-toggle" ref={toggleRef} aria-expanded={menuOpen} aria-controls="articles-menu" onClick={() => setMenuOpen(open => !open)}>
-              Articles <span aria-hidden="true">▾</span>
-            </button>
-            <div id="articles-menu" className="articles-menu" hidden={!menuOpen}>
-              {pages.map(article => <a key={article.id} href={pagePath(article.id)} aria-current={page?.id === article.id ? 'page' : undefined} onClick={event => linkClick(event, article.id)}>{article.title}</a>)}
-            </div>
-          </div>
+          <a href={basePath} className="home-link" aria-current={isHome && !hash ? 'page' : undefined} onClick={event => linkClick(event, 'home')}>Home</a>
+          <a className="section-nav-link" href={`${basePath}#learn`} aria-current={isHome && hash === '#learn' ? 'location' : undefined} onClick={event => linkClick(event, 'home', 'learn')}>Learn</a>
+          <a className="section-nav-link" href={`${basePath}#calculators`} aria-current={isHome && hash === '#calculators' ? 'location' : undefined} onClick={event => linkClick(event, 'home', 'calculators')}>Calculators</a>
+          <a className="section-nav-link" href={`${basePath}#about`} aria-current={isHome && hash === '#about' ? 'location' : undefined} onClick={event => linkClick(event, 'home', 'about')}>About</a>
         </nav>
       </header>
       <div className="page-layout">
-        <main className={isHome ? 'home-main' : 'workspace'} aria-labelledby="article-title">
-          {!isHome && <span className="workspace-label">Quantum library</span>}
-          {ActivePage ? <ActivePage key={pathname} onNavigate={navigate} /> : <article className="article"><h2 id="article-title">Page not found</h2><p>Choose an article above or <a href={basePath} onClick={event => linkClick(event, 'home')}>return home</a>.</p></article>}
-          {!isHome && <span className="workspace-footer">Quantum Effects / Articles</span>}
+        <main id="main-content" className={isHome ? 'home-main' : 'workspace'} aria-labelledby="article-title">
+          {!isHome && <nav className="breadcrumbs" aria-label="Breadcrumb"><a href={basePath} onClick={event => linkClick(event, 'home')}>Home</a><span aria-hidden="true">/</span><span>{route?.section === 'learn' ? 'Learn' : 'Calculators'}</span><span aria-hidden="true">/</span><span aria-current="page">{page?.title || 'Page not found'}</span></nav>}
+          {ActivePage ? <ActivePage key={pathname} onNavigate={navigate} /> : <article className="article"><h2 id="article-title">Page not found</h2><p>Choose a calculator from Home or <a href={basePath} onClick={event => linkClick(event, 'home')}>return home</a>.</p></article>}
+          {!isHome && <span className="workspace-footer">QubitLab / {route?.section === 'learn' ? 'Learn' : 'Calculators'}</span>}
         </main>
       </div>
     </div>

@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy QubitLab to GitHub Pages
 
 on:
   push:
@@ -23,14 +23,23 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Test
+        run: npm test
+
+      - name: Build QubitLab (/qbit-lab/)
         run: npm run build
+
+      - name: Verify page entry points
+        run: |
+          test -f dist/learn/single-qubit-fidelity/index.html
+          test -f dist/calculators/single-qubit-fidelity/index.html
+          test -f dist/404.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

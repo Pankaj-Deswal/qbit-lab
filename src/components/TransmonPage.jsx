@@ -6,7 +6,7 @@ export default function TransmonPage() {
   return <ArticleLayout title="Transmon frequency & anharmonicity">
     <p>Calculate the qubit transition frequency and anharmonicity from Josephson energy EJ and charging energy EC.</p>
     <p>Equation 6 defines ξ = √(2EC/EJ). The calculator evaluates all terms in the Appendix B expansions: B1 for frequency and B2 for anharmonicity, including the ξ²⁴ terms inside their brackets.</p>
-    <Calculator description="Enter energies divided by Planck’s constant h: EJ/h in GHz and EC/h in MHz. Results use ordinary frequency units, not radians per second."
+    <Calculator actionLabel="Calculate parameters" interpretation="The qubit frequency is the 0-to-1 transition. Anharmonicity measures how far the next transition differs, reported in both positive and signed conventions." description="Enter energies divided by Planck’s constant h: EJ/h in GHz and EC/h in MHz. Results use ordinary frequency units, not radians per second."
       fields={[
         { name: 'EJGHz', label: 'Josephson energy EJ/h (GHz)', initial: 10, min: 0 },
         { name: 'ECMHz', label: 'Charging energy EC/h (MHz)', initial: 200, min: 0 },

@@ -1,4 +1,4 @@
-# Quantum Effects
+# QubitLab
 
 A React and JavaScript website with a home page, collapsible article navigation, and interactive calculations.
 
@@ -58,12 +58,26 @@ Tests include an independent 30-state oscillator diagonalization reference at EJ
 
 ## Page URLs and navigation
 
-Home is `/quantum-effects/`. Articles use `/quantum-effects/articles/introduction`, `/quantum-effects/articles/single-qubit-fidelity`, `/quantum-effects/articles/two-qubit-fidelity`, and `/quantum-effects/articles/transmon`. The header Articles dropdown replaces the sidebar. Navigation updates browser history, so Back/Forward restores the previous page. Direct article links and reloads work with Vite.
+Home is `/qbit-lab/`. Articles use `/qbit-lab/learn/introduction`, `/qbit-lab/calculators/single-qubit-fidelity`, `/qbit-lab/calculators/two-qubit-fidelity`, and `/qbit-lab/calculators/transmon`. The header Articles dropdown replaces the sidebar. Navigation updates browser history, so Back/Forward restores the previous page. Direct article links and reloads work with Vite.
 
 For production hosting, configure an SPA fallback: serve `index.html` for unknown paths so direct article URLs work. The app displays a page-not-found view for unrecognized routes.
 
 The home page includes Anuj Aggarwal and Pankaj Kumar Deswal with their provided LinkedIn profile links.
 
-Run `npm run build` followed by `npm run preview` to open http://localhost:4173/quantum-effects/. All navigation and asset URLs use the configured Vite base path.
+Run `npm run build` followed by `npm run preview` to open http://localhost:4173/qbit-lab/. All navigation and asset URLs use the configured Vite base path.
 
 The home page uses `src/assets/schrodinger-cat.png`, generated with the built-in image generation tool. The generation and final edit prompts are saved in `src/assets/schrodinger-cat.prompt.txt`.
+
+## UI review updates
+
+Applied the shared UI review to the home hierarchy, sticky header, Learn/Calculators groups, compact About section, article breadcrumbs, typography, responsive controls, and calculator inputs/results. Calculators now show units beside fields, reset controls, empty result states, result interpretation, and prominent fidelity values. Fidelity formulas are available in expandable details. The existing Articles dropdown remains; the previously removed sidebar is not reintroduced. Scientific calculation scripts and URL paths are unchanged.
+
+Navigation now uses Home, Learn, Calculators, and About on desktop and mobile; the Articles dropdown has been removed. The palette uses neutral grey-white surfaces and one primary blue for actions and results, with red reserved for errors and measured data.
+
+QubitLab uses the supplied Bloch-sphere image at `src/assets/qubit-bloch-sphere.jpeg`. Learn, Calculators, and About navigate to home sections after React renders the destination, supporting direct hash URLs and browser Back/Forward. The existing `/qbit-lab/` deployment base is retained.
+
+## QubitLab deployment paths
+
+Home: `/qbit-lab/`. Learning pages use `/qbit-lab/learn/<topic>`; tools use `/qbit-lab/calculators/<topic>`. Both sections resolve all four topics, including `single-qubit-fidelity`. Home cards link to Learn for the introduction and Calculators for tools. Header section links still scroll to the corresponding home sections.
+
+Vite builds static HTML entry points for each route so GitHub Pages supports direct links and reloads, plus a 404 entry. The deployment workflow tests and verifies those entries before uploading. For the standard GitHub project site at `https://Pankaj-Deswal.github.io/qbit-lab/`, rename the GitHub repository from `quantum-effects` to `qbit-lab` and update your local Git remote. The local changes do not rename the remote repository or deploy the site.

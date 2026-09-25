@@ -1,33 +1,27 @@
-import catImage from '../assets/schrodinger-cat.png';
+import qubitImage from '../assets/qubit-bloch-sphere-themed.png';
 
+const tools = [
+  ['single-qubit-fidelity', 'Single-qubit fidelity', 'Estimate the effect of gate time and coherence on one qubit.', '1Q'],
+  ['two-qubit-fidelity', 'Two-qubit fidelity', 'Explore gate fidelity using the coherence times of both qubits.', '2Q'],
+  ['transmon', 'Transmon parameters', 'Find frequency and anharmonicity from Josephson and charging energies.', 'ƒ'],
+];
 export default function HomePage({ onNavigate }) {
   return <div className="home-page">
     <div className="home-hero">
-      <div className="home-copy"><p className="eyebrow">Welcome to the quantum world</p>
-        <h2 id="article-title">Small particles.<br/><span>Extraordinary possibilities.</span></h2>
-        <p>Explore the ideas behind quantum computing. Read an article, change the inputs, and see the mathematics come to life.</p>
-        <button className="primary-button" onClick={() => onNavigate('introduction')}>Start exploring <span aria-hidden="true">→</span></button>
+      <div className="home-copy"><p className="eyebrow">Concepts, calculations, understanding</p>
+        <h2 id="article-title">QubitLab</h2>
+        <p className="brand-tagline">Explore quantum computing through interactive models and calculations.</p>
+        <p>Build your intuition, explore qubit fidelity, and calculate transmon parameters. Change an input and see what it means.</p>
+        <div className="hero-actions"><button className="primary-button" onClick={() => onNavigate('home', 'learn')}>Start learning <span aria-hidden="true">→</span></button><a className="secondary-button" href="#calculators">Explore calculators</a></div>
       </div>
-      <figure className="quantum-cat">
-        <img src={catImage} width="1536" height="1024" alt="Schrödinger’s cat: overlapping alive and dead states in a box illustrate a superposition of possible outcomes." />
-        <figcaption>In Schrödinger’s thought experiment, a cat’s fate is linked to a quantum event. The idealized state combines alive and dead alternatives; a measurement gives one outcome.</figcaption>
-      </figure>
+      <figure className="qubit-hero"><img src={qubitImage} width="1644" height="957" alt="Qubit: the basic unit of quantum information. A Bloch sphere shows the states zero and one at its poles, with a state vector psi described by angles theta and phi." /></figure>
     </div>
-    <div className="home-cards">
-      {[
-        ['01', 'introduction', 'Build your foundation', 'Discover qubits and the size of their state space.'],
-        ['02', 'single-qubit-fidelity', 'Single-qubit fidelity', 'Calculate fidelity from gate, relaxation, and Ramsey decay times.'],
-        ['03', 'two-qubit-fidelity', 'Two-qubit fidelity', 'Calculate fidelity using the coherence times of both qubits.'],
-        ['04', 'transmon', 'Transmon parameters', 'Calculate frequency and anharmonicity from EJ and EC.'],
-      ].map(([number, id, title, description]) => <button className="home-card" key={id} onClick={() => onNavigate(id)}><span className="eyebrow">{number} / Explore</span><h3>{title}</h3><p>{description}</p><span aria-hidden="true">↗</span></button>)}
-    </div>
-    <section className="creators" aria-labelledby="creators-title">
-      <p className="eyebrow">The people behind Quantum Effects</p>
-      <h2 id="creators-title">Meet the creators</h2>
-      <div className="creator-grid">
-        <article className="creator-card"><h3>Anuj Aggarwal</h3><p>Co-creator</p><a href="https://www.linkedin.com/in/anuj-aggarwal-365b6886/" target="_blank" rel="noopener noreferrer">Anuj on LinkedIn <span aria-hidden="true">↗</span></a></article>
-        <article className="creator-card"><h3>Pankaj Kumar Deswal</h3><p>Co-creator</p><a href="https://www.linkedin.com/in/pankaj-kumar-deswal/" target="_blank" rel="noopener noreferrer">Pankaj on LinkedIn <span aria-hidden="true">↗</span></a></article>
-      </div>
+    <section id="learn" className="learning-section" aria-labelledby="learn-title"><p className="eyebrow">Start here</p><h2 id="learn-title">Build your foundation</h2>
+      <button className="learning-card" onClick={() => onNavigate('introduction')}><span className="tool-icon" aria-hidden="true">ψ</span><span><strong>Quantum fundamentals</strong><span>Qubits, states, and the size of a quantum state space.</span></span><span className="card-action">Read introduction →</span></button>
     </section>
+    <section id="calculators" className="learning-section" aria-labelledby="calculators-title"><p className="eyebrow">Put the ideas to work</p><h2 id="calculators-title">Interactive calculators</h2><p className="section-description">Choose a tool. Enter your parameters. Explore the result.</p>
+      <div className="home-cards">{tools.map(([id, title, description, icon]) => <button className="home-card" key={id} onClick={() => onNavigate(id)}><span className="tool-icon" aria-hidden="true">{icon}</span><h3>{title}</h3><p>{description}</p><span className="card-action">Open calculator →</span></button>)}</div>
+    </section>
+    <footer id="about" className="creators" aria-labelledby="creators-title"><div><p className="eyebrow">About this project</p><h2 id="creators-title">QubitLab</h2><p>Interactive tools for exploring quantum concepts, created by Anuj Aggarwal and Pankaj Kumar Deswal.</p></div><div className="creator-links"><a href="https://www.linkedin.com/in/anuj-aggarwal-365b6886/" target="_blank" rel="noopener noreferrer">Anuj Aggarwal · LinkedIn ↗</a><a href="https://www.linkedin.com/in/pankaj-kumar-deswal/" target="_blank" rel="noopener noreferrer">Pankaj Kumar Deswal · LinkedIn ↗</a></div></footer>
   </div>;
 }
