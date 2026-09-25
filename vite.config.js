@@ -20,6 +20,6 @@ export default defineConfig({
       await copyFile(resolve(output, 'index.html'), resolve(output, '404.html'));
     },
   }],
-  base: '/qbit-lab/',
-  preview: { port: 4173, open: '/qbit-lab/' },
+  base: '/',
+  preview: { port: 4173, open: '/' },
 });
